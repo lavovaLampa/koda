@@ -1,5 +1,7 @@
 from typing import Any
 
+from pytest import raises
+
 from koda.maybe import Just, nothing
 from koda.result import Err, Ok, Result
 from tests.utils import (
@@ -17,6 +19,11 @@ def test_result() -> None:
     enforce_applicative_apply(Ok, Err("something went wrong"))
 
 
+def test_ok_get() -> None:
+    assert Ok(10).get() == 10
+    assert ~Ok(10) == 10
+
+
 def test_ok_flat_map_err() -> None:
     def add_one(val: int) -> Result[int, str]:
         return Err(str(val) + "ok")
@@ -30,10 +37,19 @@ def test_ok_map_err() -> None:
         return f"{val}{val}"
 
     assert Ok(5).map_err(str_twice) == Ok(5)
+    assert Ok(5) | str_twice == Ok(5)
 
 
 def test_ok_swap() -> None:
     assert Ok(5).swap() == Err(5)
+
+
+def test_err_get() -> None:
+    with raises(ValueError):
+        Err(10).get()
+
+    with raises(ValueError):
+        _ = ~Err(10)
 
 
 def test_err_map() -> None:
@@ -41,6 +57,7 @@ def test_err_map() -> None:
         return 25
 
     assert Err(3).map(return_25) == Err(3)
+    assert Err(3) >> return_25 == Err(3)
 
 
 def test_err_flat_map_err() -> None:
