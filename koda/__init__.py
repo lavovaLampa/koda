@@ -12,17 +12,18 @@ from koda.either import (
 from koda.maybe import Just, Maybe, Nothing, nothing
 from koda.result import Err, Ok, Result
 from koda.utils import (
+    always,
     compose,
     identity,
     load_once,
     mapping_get,
-    maybe_to_result,
-    result_to_maybe,
     safe_try,
     to_maybe,
+    to_result,
 )
 
 __all__ = (
+    "always",
     "Either",
     "Either3",
     "Either4",
@@ -42,9 +43,8 @@ __all__ = (
     "compose",
     "identity",
     "mapping_get",
-    "maybe_to_result",
-    "result_to_maybe",
     "load_once",
     "safe_try",
     "to_maybe",
+    "to_result",
 )
